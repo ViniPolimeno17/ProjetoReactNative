@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     width: "100%",
     minHeight: "100%",
     alignItems: "center",
+    paddingBottom: 80,
   },
   titulo: {
     fontSize: 25,
