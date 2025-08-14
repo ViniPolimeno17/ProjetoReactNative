@@ -3,8 +3,37 @@ import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
 import { Input } from "../components/input/Input";
 import { Botao } from "../components/botao/botao";
 import { Card } from "../components/card/card";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Index() {
+  
+  const [cep, setCep] = useState("");
+  const [jsonCep, setJsonCep] = useState({})
+  // const [Aparcer, setAparecer] = useState(false)
+
+  async function consultarCep() {
+    try {
+      if(cep !== "" && cep.length === 8){
+        const resposta = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+        setJsonCep(resposta.data);
+        console.log(jsonCep);
+      }else{
+        alert("O cep está incorreto. Digite com 8 números")
+      }      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  // function AparecerCard(){
+  //   if (consultarCep !== null) {
+      
+  //   }
+  // }
+
+
+
+
   return (
     <>
       {/* Logo + imagem de fundo */}
@@ -23,11 +52,21 @@ export default function Index() {
           {/* 2.1. Título */}
           <Text style={styles.titulo}>Consulte seu CEP</Text>
           {/* 2.2. Input */}
-          <Input/>
+          <Input valorCep={cep} onChangeValorCep={e => {setCep(e); console.log(e);}}/>
           {/* 2.3. Botão */}
-          <Botao tituloBotao='Consultar'/>
+          <Botao tituloBotao='Consultar' onPress={consultarCep}/>
           {/* 2.4. Card de informações */}
-          <Card style={styles.card}/>
+          {jsonCep.cep &&
+          <Card 
+          cep = {jsonCep.cep}
+          logradouro = {jsonCep.logradouro} 
+          bairro = {jsonCep.bairro}
+          uf = {jsonCep.uf}
+          estado = {jsonCep.estado}
+          regiao = {jsonCep.regiao}
+          />
+          }
+          {/*style={styles.card}}*/}
         </View>
       </ScrollView>
     </>
@@ -56,6 +95,8 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 25,
+    fontFamily: "Poppins-Bold",
+    color: '#000000'
   },
   containerScroll:{
     flex: 1.5,
