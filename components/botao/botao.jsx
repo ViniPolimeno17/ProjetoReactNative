@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontSize: 16
     }
-})
+})  
